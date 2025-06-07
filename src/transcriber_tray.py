@@ -9,7 +9,14 @@ import pyperclip
 from pynput import keyboard
 from PyQt5 import QtWidgets, QtGui, QtCore
 
+# Set APP_DIR to the project root (one level up from src/)
+APP_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 AUDIO_OUTPUT = os.path.expanduser('~/recorded.wav')
+
+def resource_path(relative_path):
+    if hasattr(sys, '_MEIPASS'):
+        return os.path.join(sys._MEIPASS, relative_path)
+    return os.path.join(APP_DIR, relative_path)
 
 class TraySignals(QtCore.QObject):
     show_message = QtCore.pyqtSignal(str, str, int)
@@ -39,7 +46,7 @@ class TranscriberTray(QtWidgets.QSystemTrayIcon):
         self.setContextMenu(self.menu)
         self.setToolTip('Whisper Transcriber')
         self.set_flag_icon()
-        self.start_listening()
+        self.start_listening()  # Start listening by default
 
     @QtCore.pyqtSlot(str, str, int)
     def _show_message(self, title, message, icon):
@@ -47,12 +54,12 @@ class TranscriberTray(QtWidgets.QSystemTrayIcon):
 
     def get_icon(self):
         if self.language == 'en':
-            return QtGui.QIcon('us.png')
+            return QtGui.QIcon(resource_path(os.path.join('images', 'us.png')))
         elif self.language == 'pt':
-            return QtGui.QIcon('br.png')
+            return QtGui.QIcon(resource_path(os.path.join('images', 'br.png')))
         else:
             print(f"Invalid language code: {self.language}")
-            return QtGui.QIcon('us.png')
+            return QtGui.QIcon(resource_path(os.path.join('images', 'us.png')))
 
     def set_flag_icon(self):
         self.setIcon(self.get_icon())
@@ -102,7 +109,7 @@ class TranscriberTray(QtWidgets.QSystemTrayIcon):
             self.listening = False
             self.start_action.setEnabled(True)
             self.stop_action.setEnabled(False)
-            self.setIcon(QtGui.QIcon('micoff.png'))
+            self.setIcon(QtGui.QIcon(resource_path(os.path.join('images', 'micoff.png'))))
 
     def hotkey_listener(self):
         self.ctrl_pressed = False
@@ -148,20 +155,21 @@ class TranscriberTray(QtWidgets.QSystemTrayIcon):
             self.is_recording = True
             self.recording_thread = threading.Thread(target=self.record_audio, daemon=True)
             self.recording_thread.start()
-            self.setIcon(QtGui.QIcon('recording.png'))
+            self.setIcon(QtGui.QIcon(resource_path(os.path.join('images', 'recording.png'))))
 
     def stop_recording(self):
         if self.is_recording:
             self.is_recording = False
             if self.recording_thread:
                 self.recording_thread.join()
-            self.setIcon(QtGui.QIcon('transcribing.png'))
+            self.setIcon(QtGui.QIcon(resource_path(os.path.join('images', 'transcribing.png'))))
             if self.recording:
                 audio_np = np.concatenate(self.recording, axis=0)
                 sf.write(AUDIO_OUTPUT, audio_np, self.samplerate)
                 threading.Thread(target=self.transcribe_and_copy, daemon=True).start()
             else:
                 print('No audio file found to transcribe.')
+        self.set_flag_icon()
 
     def transcribe_and_copy(self):
         if os.path.exists(AUDIO_OUTPUT):
@@ -174,7 +182,7 @@ class TranscriberTray(QtWidgets.QSystemTrayIcon):
 
 def main():
     app = QtWidgets.QApplication(sys.argv)
-    icon = QtGui.QIcon('micoff.png')
+    icon = QtGui.QIcon(resource_path(os.path.join('images', 'us.png')))
     tray = TranscriberTray(icon)
     tray.show()
     sys.exit(app.exec_())

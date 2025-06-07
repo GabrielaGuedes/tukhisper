@@ -1,0 +1,9 @@
+[Desktop Entry]
+Type=Application
+Name=Whisper Transcriber
+Comment=Background transcriber tray app
+Exec=python3 /home/tuk/tukhisper/src/transcriber_tray.py
+Icon=/home/tuk/tukhisper/images/tukhisper.png
+Terminal=false
+Categories=Utility;
+X-GNOME-Autostart-enabled=true 
