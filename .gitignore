@@ -1,0 +1,13 @@
+# PyInstaller build folders
+build/
+dist/
+*.spec
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+
+# Editor and OS files
+*.swp
+.DS_Store 
