@@ -1,4 +1,4 @@
-# Whisper Transcriber
+# Tukhisper (Whisper Transcriber)
 
 A modern, cross-platform system tray application for instant voice-to-text transcription using OpenAI Whisper. Designed for productivity, privacy, and seamless clipboard integration.
 
