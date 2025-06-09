@@ -2,6 +2,10 @@
 
 A modern, cross-platform system tray application for instant voice-to-text transcription using OpenAI Whisper. Designed for productivity, privacy, and seamless clipboard integration.
 
+99% done by Cursor 🤖
+
+![image](./images/print.png)
+
 ---
 
 ## ✨ Features
@@ -15,7 +19,7 @@ A modern, cross-platform system tray application for instant voice-to-text trans
   - Switch between English 🇺🇸 and Portuguese 🇧🇷 from the tray menu.
   - If you speak Portuguese while "English" is selected, Whisper will transcribe your speech in English (translation mode).
 - **Startup Behavior:**
-  - The app runs automatically on system startup (if you add it to autostart).
+  - The app can run automatically on system startup (see below).
   - You can disable or re-enable hotkey listening from the tray menu at any time.
 - **Visual Feedback:**
   - Tray icon changes to indicate current state: idle, recording, transcribing, or disabled.
@@ -41,6 +45,78 @@ A modern, cross-platform system tray application for instant voice-to-text trans
    - Use the "Start" and "Stop" options in the tray menu to control hotkey listening.
 7. **Quit:**
    - Use the "Quit" option in the tray menu to exit the app.
+
+---
+
+## 🚀 Autostart on Login (Start Automatically)
+
+To make Whisper Transcriber start automatically when you log in:
+
+1. **Edit the .desktop file if needed:**
+
+   - Make sure your `transcriber_tray.desktop` file contains:
+     ```
+     [Desktop Entry]
+     Type=Application
+     Name=Whisper Transcriber
+     Comment=Background transcriber tray app
+     Exec=python3 /full/path/to/your/src/transcriber_tray.py
+     Icon=/full/path/to/your/images/tukhisper.png
+     Terminal=false
+     Categories=Utility;
+     X-GNOME-Autostart-enabled=true
+     ```
+   - Adjust the `Exec=` and `Icon=` paths to match your setup.
+
+2. **Copy the .desktop file to your autostart directory:**
+
+   ```bash
+   cp transcriber_tray.desktop ~/.config/autostart/
+   ```
+
+3. **Done!**
+   - The app will now start automatically every time you log in.
+   - To disable autostart, simply delete the file:
+     ```bash
+     rm ~/.config/autostart/transcriber_tray.desktop
+     ```
+
+---
+
+## 🖥️ Show in Application List (App Menu)
+
+To make Whisper Transcriber appear in your system's application list (app launcher/menu):
+
+1. **Create or edit the `.desktop` file:**
+
+   - Use the following as an example (edit paths if needed):
+     ```
+     [Desktop Entry]
+     Type=Application
+     Name=Whisper Transcriber
+     Comment=Background transcriber tray app
+     Exec=python3 /home/tuk/tukhisper/src/transcriber_tray.py
+     Icon=/home/tuk/tukhisper/images/tukhisper.png
+     Terminal=false
+     Categories=Utility;
+     X-GNOME-Autostart-enabled=true
+     ```
+   - Make sure the `Exec` and `Icon` paths are correct for your setup.
+
+2. **Copy the `.desktop` file to your applications directory:**
+
+   ```bash
+   cp transcriber_tray.desktop ~/.local/share/applications/
+   ```
+
+3. **(Optional) Update the application database:**
+
+   ```bash
+   update-desktop-database ~/.local/share/applications/
+   ```
+
+4. **Done!**
+   - You can now search for "Whisper Transcriber" in your app menu and launch it like any other application.
 
 ---
 
